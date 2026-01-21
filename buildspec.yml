@@ -1,0 +1,21 @@
+version: 0.2
+
+phases:
+  install:
+    commands:
+      - echo "Installing Terraform..."
+      - curl -O https://releases.hashicorp.com/terraform/1.6.6/terraform_1.6.6_linux_amd64.zip
+      - unzip terraform_1.6.6_linux_amd64.zip
+      - mv terraform /usr/local/bin/
+  build:
+    commands:
+      - echo "Running Terraform via CodeBuild"
+      - terraform --version
+      - terraform init -input=false
+      - terraform validate
+      - terraform plan -out=tfplan
+      - terraform apply -auto-approve tfplan
+
+artifacts:
+  files:
+    - '**/*'
