@@ -13,5 +13,13 @@ phases:
       - echo "Running Terraform"
       - terraform --version
       - terraform init -input=false
-      - terraform plan -out=tfplan
+
+      # Apply ONLY infra resources (no CI/CD)
+      - terraform plan \
+          -out=tfplan \
+          -target=aws_vpc.main \
+          -target=aws_subnet.public \
+          -target=aws_security_group.web_sg \
+          -target=aws_instance.web
+
       - terraform apply -auto-approve tfplan
